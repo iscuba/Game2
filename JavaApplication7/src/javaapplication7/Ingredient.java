@@ -6,6 +6,7 @@
 
 package javaapplication7;
 
+import java.util.Random;
 import javalib.colors.*;
 import javalib.worldimages.FrameImage;
 import javalib.worldimages.Posn;
@@ -56,5 +57,37 @@ public class Ingredient {
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
         }
         
+    }
+    
+    public static String randColor() {
+        int rando = randNum(1, 4);
+        switch (rando) {
+            case 1:
+                return "green";
+            case 2:
+                return "blue";
+            case 3:
+                return "yellow";
+            case 4:
+                return "red";
+            default:
+                return "white";
+        }
+    }
+    
+    public static int randNum(int min, int max){
+        Random rando = new Random();
+        int randomNum = rando.nextInt((max - min) + 1) + min;
+        return randomNum;
+    }
+    
+    public static Ingredient makeRandIngredient(){
+        int ex = randNum(1,18);
+        int wy = randNum(1,18);
+        return new Ingredient(ex,wy,randColor(),false);
+    }
+    
+    public static Ingredient makeStackIngredient(int x, int y){
+        return new Ingredient(x,y, randColor(),true);
     }
 }

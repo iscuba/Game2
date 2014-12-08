@@ -7,6 +7,7 @@
 package javaapplication7;
 
 import java.util.ArrayList;
+import static javaapplication7.Grid.testGrid;
 /**
  *
  * @author Isabella
@@ -17,11 +18,12 @@ public class Game2 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ArrayList<Ingredient> arr = new ArrayList();
-        Ingredient bun = new Ingredient(9,21,"white",true);
-        arr.add(bun);
-        Grid game = new Grid(arr, new Order(0,0,0,0));
-        game.bigBang(230, 345, .1);
+        testGrid();
+//        ArrayList<Ingredient> arr = new ArrayList();
+//        Ingredient bun = new Ingredient(9,21,"White",true);
+//        arr.add(bun);
+//        Grid game = new Grid(arr, new Order(4,2,3,0));
+//        game.bigBang(230, 345, .1);
     }
     
 }

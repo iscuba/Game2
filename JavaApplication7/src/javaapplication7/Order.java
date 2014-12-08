@@ -24,10 +24,10 @@ public class Order {
     }
     
     public boolean filled(Order ticket){
-        return this.green == ticket.green &&
-                this.blue == ticket.blue &&
-                this.yellow == ticket.yellow &&
-                this.red == ticket.red;
+        return this.green >= ticket.green &&
+                this.blue >= ticket.blue &&
+                this.yellow >= ticket.yellow &&
+                this.red >= ticket.red;
     }
     
     //returns random number from 1 - 5 inc
