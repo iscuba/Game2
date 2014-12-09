@@ -19,11 +19,11 @@ public class Game2 {
      */
     public static void main(String[] args) {
         testGrid();
-//        ArrayList<Ingredient> arr = new ArrayList();
-//        Ingredient bun = new Ingredient(9,21,"White",true);
-//        arr.add(bun);
-//        Grid game = new Grid(arr, new Order(4,2,3,0));
-//        game.bigBang(230, 345, .1);
+        ArrayList<Ingredient> arr = new ArrayList();
+        Ingredient bun = new Ingredient(9,21,"white",true);
+        arr.add(bun);
+        Grid game = new Grid(arr, new Order(4,2,3,0));
+        game.bigBang(1080, 420, .1);
     }
     
 }

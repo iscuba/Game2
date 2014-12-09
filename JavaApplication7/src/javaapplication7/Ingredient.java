@@ -44,18 +44,19 @@ public class Ingredient {
     }
     
     public FrameImage drawIngredient() {
-        switch(this.color){
-            case "green":
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Green());
-            case "blue":
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Blue());
-            case "yellow":
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Yellow());
-            case "red":
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Red());
-            default :
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
-        }
+        return new FrameImage(new Posn(this.x * 10, this.y*10), 60, 20, new Green());
+//        switch(this.color){
+//            case "green":
+//                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Green());
+//            case "blue":
+//                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Blue());
+//            case "yellow":
+//                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Yellow());
+//            case "red":
+//                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Red());
+//            default :
+//                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
+//        }
         
     }
     
