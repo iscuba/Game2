@@ -21,7 +21,7 @@ import javalib.funworld.*;
  * @author Isabella
  */
 public class Grid extends World {
- 
+
     final int MAX = 18;
     final int MIN = 1;
     public int height = 1;
@@ -68,11 +68,14 @@ public class Grid extends World {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < stack.size(); i++) {
             Ingredient current = stack.get(i);
-            if (current.stacked ){
-                if (current.x <= MIN){
+            if (!current.stacked){
+                tempStack.add(current);
+            }
+            if (current.stacked) {
+                if (current.x <= MIN) {
                     tempStack.add(current);
                 } else {
-                    tempStack.add(new Ingredient (current.x - 1, current.y, current.color, current.stacked));
+                    tempStack.add(new Ingredient(current.x - 1, current.y, current.color, current.stacked));
                 }
             }
         }
@@ -83,11 +86,14 @@ public class Grid extends World {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < this.stack.size(); i++) {
             Ingredient current = stack.get(i);
-            if (current.stacked ){
-                if (current.x >= MAX){
+            if (!current.stacked){
+                tempStack.add(current);
+            }
+            if (current.stacked) {
+                if (current.x >= MAX) {
                     tempStack.add(current);
                 } else {
-                    tempStack.add(new Ingredient (current.x + 1, current.y, current.color, current.stacked));
+                    tempStack.add(new Ingredient(current.x + 1, current.y, current.color, current.stacked));
                 }
             }
         }
@@ -100,6 +106,8 @@ public class Grid extends World {
                 return this.moveStackLeft();
             case "right":
                 return this.moveStackRight();
+            case "down":
+                return this.dropRandIngredient();
             default:
                 return this;
         }
@@ -226,20 +234,17 @@ public class Grid extends World {
 
     public World onTick() {
        //  if the random number is 3 then call make new Ingredient 
-        int rando = randNum(1, 5);
-        if (rando == 3) {
-            //is this prone to time traveling? 
-            this.dropRandIngredient();
-            //makes a new Ingrdient with the stacked set to false (a new dropping Ing is added to stack)
-            //      return new Grid (this.stack.dropRandIngredent(), this.ticket) ;
-        }
+        //is this prone to time traveling? 
+        //makes a new Ingrdient with the stacked set to false (a new dropping Ing is added to stack)
+        //      return new Grid (this.stack.dropRandIngredent(), this.ticket) ;
         if (looseHuh()) {
             return this.oldWorld;
         } else if (winHuh()) {
             return this;
-
         }
         return this.stackIngredients();
+//        return this.dropRandIngredient();
+//        return this.stackIngredients();
     }
 
     public static int randStatNum(int min, int max) {
@@ -314,7 +319,6 @@ public class Grid extends World {
 //        Grid stackedGrid = unStack.stackIngredients();
 //        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
 //        //testing for moving the ingredients down the screen every second 
-
         //testing to move the grid right:
         for (int i = 0; i > 100; i++) {
             Grid testGrid1 = makeRandGrid();
