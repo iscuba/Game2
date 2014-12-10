@@ -194,14 +194,19 @@ public class Grid extends World {
     }
 
     public Grid dropRandIngredient() {
-        int randoX = randNum(1, 18);
-        Ingredient newIng = new Ingredient(randoX, 1, randColor(), false);
-        ArrayList<Ingredient> addedStack = new ArrayList();
-        for (int i = 0; i < this.stack.size(); i++) {
-            addedStack.add(this.stack.get(i));
+        int drophuh = randNum(1, 5);
+        if (drophuh == 3) {
+            int randoX = randNum(1, 18);
+            Ingredient newIng = new Ingredient(randoX, 1, randColor(), false);
+            ArrayList<Ingredient> addedStack = new ArrayList();
+            for (int i = 0; i < this.stack.size(); i++) {
+                addedStack.add(this.stack.get(i));
+            }
+            addedStack.add(newIng);
+            return new Grid(addedStack, this.ticket, this.check);
+        } else {
+            return this;
         }
-        addedStack.add(newIng);
-        return new Grid(addedStack, this.ticket, this.check);
     }
 
     public WorldImage back = new RectangleImage(new Posn(0, 0), 1080, 860, new Black());
