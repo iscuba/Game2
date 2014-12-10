@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication7;
+package Game2;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -21,31 +21,28 @@ import javalib.funworld.*;
  * @author Isabella
  */
 public class Grid extends World {
-
-    //not how to do it 
-
-
+ 
     final int MAX = 18;
     final int MIN = 1;
     public int height = 1;
     public Order ticket;
     public Diner oldWorld;
-    public Order check; 
+    public Order check;
     public ArrayList<Ingredient> stack;
 
-    public Grid(ArrayList<Ingredient> burger, Order o, Order c ) {
+    public Grid(ArrayList<Ingredient> burger, Order o, Order c) {
         this.stack = burger;
-        this.ticket = o; 
+        this.ticket = o;
         this.check = c;
     }
-    
+
     public Grid(ArrayList<Ingredient> burger, Order o, Order c, Diner w) {
         this.stack = burger;
         this.ticket = o;
         this.check = c;
-        this.oldWorld = w; 
+        this.oldWorld = w;
     }
-    
+
     public int randNum(int min, int max) {
         Random rando = new Random();
         int randomNum = rando.nextInt((max - min) + 1) + min;
@@ -63,7 +60,7 @@ public class Grid extends World {
                 tempo.add(new Ingredient(current.x, current.y + 1, current.color, current.stacked));
             }
         }
-        return new Grid(tempo, this.ticket, this.check );
+        return new Grid(tempo, this.ticket, this.check);
     }
 
     // my on key uses this to move the stack left or right
@@ -79,7 +76,7 @@ public class Grid extends World {
                 tempStack.add(new Ingredient(current.x - 1, current.y, current.color, current.stacked));
             }
         }
-        return new Grid(tempStack, this.ticket, this.check );
+        return new Grid(tempStack, this.ticket, this.check);
     }
 
     public Grid moveStackRight() {
@@ -122,7 +119,7 @@ public class Grid extends World {
             }
         }
         Order tempO = new Order(countGreen(), countBlue(), countYellow(), countRed());
-        return new Grid(tempStack,this.ticket ,tempO);
+        return new Grid(tempStack, this.ticket, tempO);
     }
 
     public int countGreen() {
@@ -207,7 +204,7 @@ public class Grid extends World {
         return new Grid(addedStack, this.ticket, this.check);
     }
 
-    public WorldImage back = new RectangleImage(new Posn(0, 40), 1080, 420, new Black());
+    public WorldImage back = new RectangleImage(new Posn(0, 0), 1080, 420, new Black());
     public WorldImage frame = new FrameImage(new Posn(0, 0), 1080, 420, new Blue());
     public WorldImage backFrame = new OverlayImages(back, frame);
     public WorldImage backdrop = new OverlayImages(back, frame);
@@ -224,14 +221,14 @@ public class Grid extends World {
     }
 
     public World onTick() {
-        // if the random number is 3 then call make new Ingredient 
-//        int rando = randNum(1, 5);
-//        if (rando == 3) {
-//            //is this prone to time traveling? 
-//            this.dropRandIngredient();
-//            //makes a new Ingrdient with the stacked set to false (a new dropping Ing is added to stack)
-//            //      return new Grid (this.stack.dropRandIngredent(), this.ticket) ;
-//        }
+       //  if the random number is 3 then call make new Ingredient 
+        int rando = randNum(1, 5);
+        if (rando == 3) {
+            //is this prone to time traveling? 
+            this.dropRandIngredient();
+            //makes a new Ingrdient with the stacked set to false (a new dropping Ing is added to stack)
+            //      return new Grid (this.stack.dropRandIngredent(), this.ticket) ;
+        }
         if (looseHuh()) {
             return this.oldWorld;
         } else if (winHuh()) {
@@ -266,10 +263,10 @@ public class Grid extends World {
             arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
         }
         //idk what to give it for order, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2,2,2,2));
+        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2));
     }
-    
-    public static Grid makeUnStackGrid(){
+
+    public static Grid makeUnStackGrid() {
         ArrayList<Ingredient> arg = new ArrayList<>();
         int randX = randStatNum(1, 18);
         Ingredient bun = new Ingredient(randX, 21, Ingredient.randColor(), true);
@@ -283,10 +280,10 @@ public class Grid extends World {
             int randx = randStatNum(1, 18);
             int randy = randStatNum(1, 20);
             arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
-            
+
         }
         //adds a block to the top of the stack that isnt "stacked" yet 
-        arg.add(new Ingredient(randX, 20-randHeight, Ingredient.randColor(), false));
+        arg.add(new Ingredient(randX, 20 - randHeight, Ingredient.randColor(), false));
         //idk what to give it for order, but for right now whatever. 
         return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2));
     }
@@ -294,26 +291,25 @@ public class Grid extends World {
     public static void testGrid() {
         //crude test for stackIngredients:
         ArrayList<Ingredient> arrg = new ArrayList<>();
-        arrg.add(new Ingredient( 3, 3, "blue", true));
-        arrg.add(new Ingredient(3,2,"blue", false));
-        Grid crude1 = new Grid (arrg, new Order(2,2,2,2), new Order(2,2,2,2));
+        arrg.add(new Ingredient(3, 3, "blue", true));
+        arrg.add(new Ingredient(3, 2, "blue", false));
+        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2));
         Grid crude = crude1.moveStackRight();
         Grid stCrude = crude.stackIngredients();
         //System.out.println("stackX for c is: "+crude.stackX+" and for stacked: "+ stCrude.stackX);
-        System.out.println("stack's height is: "+crude.stack.size()+" Stacked should be +1: "+stCrude.stack.size());
-        
+        System.out.println("stack's height is: " + crude.stack.size() + " Stacked should be +1: " + stCrude.stack.size());
+
         //test moving left and right:
         Grid testGrid12 = makeRandGrid();
-        int height2 = testGrid12.stack.size()-1;
+        int height2 = testGrid12.stack.size() - 1;
         Grid movedRight12 = testGrid12.onKeyEvent("right");
-        System.out.println("stack's X is: "+testGrid12.stack.get(height2).x+" and moved right: "+ movedRight12.stack.get(height2).x);
+        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
         Grid movedLeft12 = testGrid12.onKeyEvent("left");
-        System.out.println("stack's X is: "+testGrid12.stack.get(height2).x+" and moved left: "+ movedLeft12.stack.get(height2).x);
+        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
         Grid unStack = makeUnStackGrid();
         Grid stackedGrid = unStack.stackIngredients();
-        System.out.println("height before stacking : "+ unStack.stack.size()+" after should be +1 : "+stackedGrid.stack.size());
+        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
         //testing for moving the ingredients down the screen every second 
-        
 
         //testing to move the grid right:
         for (int i = 0; i > 100; i++) {

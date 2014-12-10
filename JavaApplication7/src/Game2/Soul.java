@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package javaapplication7;
+package Game2;
 
 import javalib.colors.Blue;
 import javalib.colors.Red;
@@ -16,28 +15,28 @@ import javalib.worldimages.Posn;
  * @author Isabella
  */
 public class Soul {
+
     public int x;
     public int y;
     public Order order;
-    public boolean savedHuh;
-    
-    public Soul(int x, int y, Order wish){
+
+    public Soul(int x, int y, Order wish) {
         this.x = x;
         this.y = y;
         this.order = wish;
     }
-    
+
     //used to make the User character 
-    public Soul(int x, int y){
+    public Soul(int x, int y) {
         this.x = x;
         this.y = y;
     }
-    
-    public DiskImage drawSoul(){
+
+    public DiskImage drawSoul() {
         return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Blue());
     }
-    
-    public DiskImage drawPlayer(){
-        return new DiskImage(new Posn(this.x * 20 , this.y * 20), 10, new Red());
+
+    public DiskImage drawPlayer() {
+        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Red());
     }
 }

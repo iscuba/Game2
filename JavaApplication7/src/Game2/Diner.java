@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package javaapplication7;
+package Game2;
 
 import javalib.funworld.World;
 import javalib.worldimages.WorldImage;
 import java.util.ArrayList;
-import static javaapplication7.Grid.randStatNum;
+import static Game2.Grid.randStatNum;
 import javalib.colors.Black;
 import javalib.colors.Red;
 import javalib.worldimages.OverlayImages;
@@ -43,11 +43,6 @@ public class Diner extends World {
 
         this.player = user;
         this.souls = arr;
-    }
-    
-    public Diner(Soul user, ArrayList<Soul> souls){
-        this.player = user; 
-        this.souls = souls;
     }
 
     public Diner moveLeft() {
@@ -96,15 +91,15 @@ public class Diner extends World {
                 return this;
         }
     }
-    
-    public boolean WinHuh(){
+
+    public boolean WinHuh() {
         return souls.isEmpty();
     }
-    
-    public WorldImage winner = new TextImage( new Posn(100,100), "You Freed Us", 32, new Red());
-    
-    public World onTick(){
-        if (WinHuh()){
+
+    public WorldImage winner = new TextImage(new Posn(100, 100), "You Freed Us", 32, new Red());
+
+    public World onTick() {
+        if (WinHuh()) {
             back = new OverlayImages(back, winner);
             return this;
         }
@@ -112,7 +107,7 @@ public class Diner extends World {
         for (int i = 0; i < souls.size(); i++) {
             if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
                 ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "white", true);
+                Ingredient bun = new Ingredient(9, 21, "red", true);
                 arr.add(bun);
                 Order place = souls.get(i).order;
                 souls.remove(i);
@@ -122,7 +117,7 @@ public class Diner extends World {
         }
         return tempG;
     }
-    
+
     public WorldImage back = new RectangleImage(new Posn(0, 0), 620, 620, new Black());
 
     public WorldImage makeImage() {
@@ -147,31 +142,31 @@ public class Diner extends World {
         for (int i = 0; i < 100; i++) {
             Diner diner88 = makeRandDiner();
             Diner movedDiner = diner88.onKeyEvent("right");
-            if (!(diner88.player.x <= movedDiner.player.x)){
+            if (!(diner88.player.x <= movedDiner.player.x)) {
                 System.out.println("fix on tick Right");
             }
         }
-        
+
         for (int i = 0; i < 100; i++) {
             Diner diner88 = makeRandDiner();
             Diner movedDiner = diner88.onKeyEvent("left");
-            if (!(diner88.player.x >= movedDiner.player.x)){
+            if (!(diner88.player.x >= movedDiner.player.x)) {
                 System.out.println("fix on tick Left");
             }
         }
-        
+
         for (int i = 0; i < 100; i++) {
             Diner diner88 = makeRandDiner();
             Diner movedDiner = diner88.onKeyEvent("up");
-            if (!(diner88.player.y >= movedDiner.player.y)){
+            if (!(diner88.player.y >= movedDiner.player.y)) {
                 System.out.println("fix on tick Up");
             }
         }
-        
+
         for (int i = 0; i < 100; i++) {
             Diner diner88 = makeRandDiner();
             Diner movedDiner = diner88.onKeyEvent("down");
-            if (!(diner88.player.x <= movedDiner.player.x)){
+            if (!(diner88.player.x <= movedDiner.player.x)) {
                 System.out.println("fix on tick down");
             }
         }
