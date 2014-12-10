@@ -202,8 +202,8 @@ public class Grid extends World {
     }
 
     public Grid dropRandIngredient() {
-        int drophuh = randNum(1, 5);
-        if (drophuh == 3) {
+ //       int drophuh = randNum(1, 5);
+ //       if (drophuh == 3) {
             int randoX = randNum(1, 18);
             Ingredient newIng = new Ingredient(randoX, 1, randColor(), false);
             ArrayList<Ingredient> addedStack = new ArrayList();
@@ -212,13 +212,13 @@ public class Grid extends World {
             }
             addedStack.add(newIng);
             return new Grid(addedStack, this.ticket, this.check);
-        } else {
-            return this;
-        }
+ //       } else {
+ //           return this;
+ //      }
     }
 
-    public WorldImage back = new RectangleImage(new Posn(0, 0), 1080, 860, new Black());
-    public WorldImage frame = new FrameImage(new Posn(0, 0), 1080, 860, new Blue());
+    public WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
+    public WorldImage frame = new FrameImage(new Posn(0, 0), 780, 860, new Blue());
     public WorldImage backdrop = new OverlayImages(back, frame);
 
     public WorldImage makeImage() {
@@ -242,6 +242,9 @@ public class Grid extends World {
         } else if (winHuh()) {
             return this;
         }
+        Grid dropped = new Grid(this.stack, this.ticket, this.check);
+        //should drop ingredients and stack intredients be the same? 
+        this.dropIngredients();
         return this.stackIngredients();
 //        return this.dropRandIngredient();
 //        return this.stackIngredients();
@@ -309,16 +312,18 @@ public class Grid extends World {
         System.out.println("stack's height is: " + crude.stack.size() + " Stacked should be +1: " + stCrude.stack.size());
 
         //test moving left and right:
-//        Grid testGrid12 = makeRandGrid();
-//        int height2 = testGrid12.stack.size() - 1;
-//        Grid movedRight12 = testGrid12.onKeyEvent("right");
-//        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
-//        Grid movedLeft12 = testGrid12.onKeyEvent("left");
-//        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
-//        Grid unStack = makeUnStackGrid();
-//        Grid stackedGrid = unStack.stackIngredients();
-//        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
-//        //testing for moving the ingredients down the screen every second 
+        Grid testGrid12 = makeRandGrid();
+        int height2 = testGrid12.stack.size() - 1;
+        Grid movedRight12 = testGrid12.onKeyEvent("right");
+        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
+        Grid movedLeft12 = testGrid12.onKeyEvent("left");
+        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
+        Grid unStack = makeUnStackGrid();
+        Grid stackedGrid = unStack.stackIngredients();
+        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
+   
+        //testing for moving the ingredients down the screen every second 
+ 
         //testing to move the grid right:
         for (int i = 0; i > 100; i++) {
             Grid testGrid1 = makeRandGrid();
@@ -326,21 +331,38 @@ public class Grid extends World {
             Grid movedRight1 = testGrid1.onKeyEvent("right");
             if (!(testGrid1.stack.get(height).x <= movedRight1.stack.get(height).x)) {
                 System.out.println("move grid right needs checking");
-            } else {
-
-            }
+            } 
         }
 
-        //testing to moe the grid left: 
+        //testing to move the grid left: 
         for (int i = 0; i > 100; i++) {
             Grid testGrid1 = makeRandGrid();
             int height = testGrid1.stack.size() - 1;
             Grid movedLeft1 = testGrid1.onKeyEvent("left");
-            System.out.println("stack's X is: " + testGrid1.stack.get(height).x + " and moved right: " + movedLeft1.stack.get(height).x);
-
             if (!(testGrid1.stack.get(height).x >= movedLeft1.stack.get(height).x)) {
                 System.out.println("move grid right needs checking");
-            } else {
+            } 
+        }
+        
+        //testing to see if a new ingredient drops when down is pressed 
+        for (int i = 0; i < 100; i++){
+            Grid testGrid = makeRandGrid();
+            int stackSize = testGrid.stack.size();
+            Grid addedIng = testGrid.onKeyEvent("down");
+            int addedStackSize = addedIng.stack.size();
+            if (!(stackSize <= addedStackSize)){
+                System.out.println("on key event down needs checking");
+            }
+        }
+        
+        //test to see if dropRandIngredient works 
+        for (int i = 0; i < 100; i++){
+            Grid testGrid = makeRandGrid();
+            int stackSize = testGrid.stack.size();
+            Grid addedIng = testGrid.dropRandIngredient();
+            int addedStackSize = addedIng.stack.size();
+            if (!(stackSize <= addedStackSize)){
+                System.out.println("dropRandIngredient needs checking");
             }
         }
     }
