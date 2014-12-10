@@ -68,12 +68,12 @@ public class Grid extends World {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < stack.size(); i++) {
             Ingredient current = stack.get(i);
-            if (current.stacked) {
-                tempStack.add(current);
-            } else if (current.x <= MIN) {
-                tempStack.add(current);
-            } else {
-                tempStack.add(new Ingredient(current.x - 1, current.y, current.color, current.stacked));
+            if (current.stacked ){
+                if (current.x <= MIN){
+                    tempStack.add(current);
+                } else {
+                    tempStack.add(new Ingredient (current.x - 1, current.y, current.color, current.stacked));
+                }
             }
         }
         return new Grid(tempStack, this.ticket, this.check);
@@ -83,12 +83,12 @@ public class Grid extends World {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < this.stack.size(); i++) {
             Ingredient current = stack.get(i);
-            if (current.stacked) {
-                tempStack.add(current);
-            } else if (current.x >= MAX) {
-                tempStack.add(current);
-            } else {
-                tempStack.add(new Ingredient(current.x + 1, current.y, current.color, current.stacked));
+            if (current.stacked ){
+                if (current.x >= MAX){
+                    tempStack.add(current);
+                } else {
+                    tempStack.add(new Ingredient (current.x + 1, current.y, current.color, current.stacked));
+                }
             }
         }
         return new Grid(tempStack, this.ticket, this.check);
@@ -204,9 +204,8 @@ public class Grid extends World {
         return new Grid(addedStack, this.ticket, this.check);
     }
 
-    public WorldImage back = new RectangleImage(new Posn(0, 0), 1080, 420, new Black());
-    public WorldImage frame = new FrameImage(new Posn(0, 0), 1080, 420, new Blue());
-    public WorldImage backFrame = new OverlayImages(back, frame);
+    public WorldImage back = new RectangleImage(new Posn(0, 0), 1080, 860, new Black());
+    public WorldImage frame = new FrameImage(new Posn(0, 0), 1080, 860, new Blue());
     public WorldImage backdrop = new OverlayImages(back, frame);
 
     public WorldImage makeImage() {
@@ -300,16 +299,16 @@ public class Grid extends World {
         System.out.println("stack's height is: " + crude.stack.size() + " Stacked should be +1: " + stCrude.stack.size());
 
         //test moving left and right:
-        Grid testGrid12 = makeRandGrid();
-        int height2 = testGrid12.stack.size() - 1;
-        Grid movedRight12 = testGrid12.onKeyEvent("right");
-        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
-        Grid movedLeft12 = testGrid12.onKeyEvent("left");
-        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
-        Grid unStack = makeUnStackGrid();
-        Grid stackedGrid = unStack.stackIngredients();
-        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
-        //testing for moving the ingredients down the screen every second 
+//        Grid testGrid12 = makeRandGrid();
+//        int height2 = testGrid12.stack.size() - 1;
+//        Grid movedRight12 = testGrid12.onKeyEvent("right");
+//        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
+//        Grid movedLeft12 = testGrid12.onKeyEvent("left");
+//        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
+//        Grid unStack = makeUnStackGrid();
+//        Grid stackedGrid = unStack.stackIngredients();
+//        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
+//        //testing for moving the ingredients down the screen every second 
 
         //testing to move the grid right:
         for (int i = 0; i > 100; i++) {
