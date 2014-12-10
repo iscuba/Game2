@@ -10,9 +10,11 @@ import javalib.worldimages.WorldImage;
 import java.util.ArrayList;
 import static javaapplication7.Grid.randStatNum;
 import javalib.colors.Black;
+import javalib.colors.Red;
 import javalib.worldimages.OverlayImages;
 import javalib.worldimages.Posn;
 import javalib.worldimages.RectangleImage;
+import javalib.worldimages.TextImage;
 
 /**
  *
@@ -41,6 +43,11 @@ public class Diner extends World {
 
         this.player = user;
         this.souls = arr;
+    }
+    
+    public Diner(Soul user, ArrayList<Soul> souls){
+        this.player = user; 
+        this.souls = souls;
     }
 
     public Diner moveLeft() {
@@ -90,15 +97,26 @@ public class Diner extends World {
         }
     }
     
+    public boolean WinHuh(){
+        return souls.isEmpty();
+    }
+    
+    public WorldImage winner = new TextImage( new Posn(100,100), "You Freed Us", 32, new Red());
+    
     public World onTick(){
+        if (WinHuh()){
+            back = new OverlayImages(back, winner);
+            return this;
+        }
         World tempG = this;
         for (int i = 0; i < souls.size(); i++) {
             if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-                souls.remove(i);
                 ArrayList<Ingredient> arr = new ArrayList();
                 Ingredient bun = new Ingredient(9, 21, "white", true);
                 arr.add(bun);
-                tempG = new Grid(arr, souls.get(i).order, new Order(0, 0, 0, 0), this);
+                Order place = souls.get(i).order;
+                souls.remove(i);
+                tempG = new Grid(arr, place, new Order(0, 0, 0, 0), this);
             } else {
             }
         }

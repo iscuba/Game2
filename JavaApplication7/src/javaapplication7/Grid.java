@@ -29,7 +29,7 @@ public class Grid extends World {
     final int MIN = 1;
     public int height = 1;
     public Order ticket;
-    public World oldWorld;
+    public Diner oldWorld;
     public Order check; 
     public ArrayList<Ingredient> stack;
 
@@ -39,7 +39,7 @@ public class Grid extends World {
         this.check = c;
     }
     
-    public Grid(ArrayList<Ingredient> burger, Order o, Order c, World w) {
+    public Grid(ArrayList<Ingredient> burger, Order o, Order c, Diner w) {
         this.stack = burger;
         this.ticket = o;
         this.check = c;

@@ -19,6 +19,7 @@ public class Soul {
     public int x;
     public int y;
     public Order order;
+    public boolean savedHuh;
     
     public Soul(int x, int y, Order wish){
         this.x = x;
