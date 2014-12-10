@@ -7,6 +7,7 @@
 package javaapplication7;
 
 import javalib.colors.Blue;
+import javalib.colors.Red;
 import javalib.worldimages.DiskImage;
 import javalib.worldimages.Posn;
 
@@ -32,6 +33,10 @@ public class Soul {
     }
     
     public DiskImage drawSoul(){
-        return new DiskImage(new Posn(this.x, this.y), 20, new Blue());
+        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Blue());
+    }
+    
+    public DiskImage drawPlayer(){
+        return new DiskImage(new Posn(this.x * 20 , this.y * 20), 10, new Red());
     }
 }

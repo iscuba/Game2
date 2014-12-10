@@ -8,7 +8,11 @@ package javaapplication7;
 import javalib.funworld.World;
 import javalib.worldimages.WorldImage;
 import java.util.ArrayList;
+import static javaapplication7.Grid.randStatNum;
+import javalib.colors.Black;
+import javalib.worldimages.OverlayImages;
 import javalib.worldimages.Posn;
+import javalib.worldimages.RectangleImage;
 
 /**
  *
@@ -20,48 +24,102 @@ public class Diner extends World {
     public Soul player;
     public ArrayList<Soul> souls;
 
-    final int WIDTH = 10;
-    final int HEIGHT = 10;
+    final static int WIDTH = 15;
+    final static int HEIGHT = 15;
 
-    final Soul soul1 = new Soul(2, 2, new Order(1, 2, 3, 4));
-    final Soul soul2 = new Soul(4, 5, new Order(4, 3, 1, 4));
-    final Soul soul3 = new Soul(6, 8, new Order(6, 2, 0, 1));
+    final Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4));
+    final Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 4));
+    final Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1));
     final Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3));
 
-    public Diner(Soul user, ArrayList<Soul> souls) {
+    public Diner(Soul user) {
+        ArrayList<Soul> arr = new ArrayList();
+        arr.add(soul1);
+        arr.add(soul2);
+        arr.add(soul3);
+        arr.add(soul4);
+        
         this.player = user;
-        this.souls = souls;
+        this.souls = arr;
     }
 
     public World moveLeft() {
-        if (player.x <= WIDTH) {
+        for (int i = 0; i < souls.size(); i++) {
+            // if the player is running into a soul make a new Grid game 
+            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
+                souls.remove(i);
+                dinerWorld = new Diner(this.player);
+                ArrayList<Ingredient> arr = new ArrayList();
+                Ingredient bun = new Ingredient(9, 21, "white", true);
+                arr.add(bun);
+                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
+                return game; 
+            }
+        }
+        if (player.x <= 1) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x - 1, this.player.y), this.souls);
+            return new Diner(new Soul(this.player.x - 1, this.player.y));
         }
     }
 
     public World moveRight() {
+        for (int i = 0; i < souls.size(); i++) {
+            // if the player is running into a soul make a new Grid game 
+            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
+                souls.remove(i);
+                dinerWorld = new Diner(this.player);
+                ArrayList<Ingredient> arr = new ArrayList();
+                Ingredient bun = new Ingredient(9, 21, "white", true);
+                arr.add(bun);
+                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
+                return game; 
+            }
+        }
         if (player.x >= WIDTH) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x + 1, this.player.y), this.souls);
+            return new Diner(new Soul(this.player.x + 1, this.player.y));
         }
     }
 
     public World moveUp() {
-        if (player.y <= HEIGHT) {
+        for (int i = 0; i < souls.size(); i++) {
+            // if the player is running into a soul make a new Grid game 
+            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
+                souls.remove(i);
+                dinerWorld = new Diner(this.player);
+                ArrayList<Ingredient> arr = new ArrayList();
+                Ingredient bun = new Ingredient(9, 21, "white", true);
+                arr.add(bun);
+                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
+                return game; 
+            }
+        }
+        if (player.y <= 0) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y - 1), this.souls);
+            return new Diner(new Soul(this.player.x, this.player.y - 1));
         }
     }
 
     public World moveDown() {
-        if (player.y <= HEIGHT) {
+        for (int i = 0; i < souls.size(); i++) {
+            // if the player is running into a soul make a new Grid game 
+            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
+                souls.remove(i);
+                dinerWorld = new Diner(this.player);
+                ArrayList<Ingredient> arr = new ArrayList();
+                Ingredient bun = new Ingredient(9, 21, "white", true);
+                arr.add(bun);
+                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
+                return game; 
+            }
+        }
+        if (player.y >= HEIGHT) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y + 1), this.souls);
+            return new Diner(new Soul(this.player.x, this.player.y + 1));
         }
     }
 
@@ -79,17 +137,25 @@ public class Diner extends World {
                 return this;
         }
     }
-
+    
+    
+//doesnt work 
     public World onMouseClicked(Posn mouse) {
-        if (mouse == new Posn(soul1.x, soul1.y)) {
-            souls.remove(soul1);
-            dinerWorld  = new Diner(this.player, this.souls);
-            ArrayList<Ingredient> arr = new ArrayList();
-            Ingredient bun = new Ingredient(9, 21, "white", true);
+        // Ugh why cant I do this in a for loop? 
+        World tempG = this;
+        for (int i = 0; i < souls.size(); i++) {
+            if (mouse == new Posn(souls.get(i).x, souls.get(i).y)) {
+                souls.remove(i);
+                ArrayList<Ingredient> arr = new ArrayList();
+                Ingredient bun = new Ingredient(9, 21, "white", true);
+                arr.add(bun);
+                tempG = new Grid(arr, souls.get(i).order, new Order(0, 0, 0, 0), this);
+            } else {
+            }
+        }
+        return tempG;
 
-            arr.add (bun);
-            Grid game = new Grid(arr, souls.get(i).order, new Order(0, 0, 0, 0), dinerWorld);
-            return game ;
+    }
 
 //        for (int i = 0; i < souls.size(); i++) {
 //            // if the player is running into a soul make a new Grid game 
@@ -103,14 +169,28 @@ public class Diner extends World {
 //                return game; 
 //            }
 //        }
-        }
-
-     {
-            
     
-
+    public WorldImage back = new RectangleImage(new Posn(0, 0), 620, 620, new Black());
+    
     public WorldImage makeImage() {
-
+        for (int i = 0; i < souls.size(); i++){
+            WorldImage temp = souls.get(i).drawSoul();
+            back = new OverlayImages(back, temp);
+        }
+        WorldImage s = player.drawPlayer();
+        back = new OverlayImages(back, s);
+        return back;
+    }
+    
+    public static Diner makeRandDiner(){
+        int randoX = randStatNum(0, WIDTH);
+        int randoY = randStatNum(0, HEIGHT);
+        Soul play = new Soul(randoX,randoY); 
+        return new Diner(play);
+    }
+    
+    public static void TestDiner(){
+        
     }
 
 }
