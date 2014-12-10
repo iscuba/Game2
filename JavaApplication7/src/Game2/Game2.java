@@ -21,7 +21,17 @@ public class Game2 {
     public static void main(String[] args) {
         testGrid();
         testDiner();
-        Diner game = new Diner(new Soul(1, 15));
+        ArrayList<Soul> souls = new ArrayList<Soul>();
+        Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4), false);
+        Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 4), false);
+        Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1), false);
+        Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3), false);
+        
+        souls.add(soul1);
+        souls.add(soul2);
+        souls.add(soul3);
+        souls.add(soul4);
+        Diner game = new Diner(new Soul(1, 15), souls);
         game.bigBang(1080, 500, .1);
 //        ArrayList<Ingredient> arr = new ArrayList();
 //        Ingredient bun = new Ingredient(9,21,"white",true);

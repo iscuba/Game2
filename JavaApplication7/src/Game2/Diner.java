@@ -29,12 +29,12 @@ public class Diner extends World {
     final static int WIDTH = 15;
     final static int HEIGHT = 15;
 
-    final Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4));
-    final Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 4));
-    final Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1));
-    final Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3));
+    public Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4), false);
+    public Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 4), false);
+    public Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1), false);
+    public Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3),false);
 
-    public Diner(Soul user) {
+    public Diner(Soul user, ArrayList<Soul> souls) {
         ArrayList<Soul> arr = new ArrayList();
         arr.add(soul1);
         arr.add(soul2);
@@ -42,14 +42,14 @@ public class Diner extends World {
         arr.add(soul4);
 
         this.player = user;
-        this.souls = arr;
+        this.souls = souls;
     }
 
     public Diner moveLeft() {
         if (player.x <= 0) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x - 1, this.player.y));
+            return new Diner( new Soul(this.player.x - 1, this.player.y), this.souls);
         }
     }
 
@@ -57,7 +57,7 @@ public class Diner extends World {
         if (player.x >= WIDTH) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x + 1, this.player.y));
+            return new Diner(new Soul(this.player.x + 1, this.player.y), this.souls);
         }
     }
 
@@ -65,7 +65,7 @@ public class Diner extends World {
         if (player.y <= 0) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y - 1));
+            return new Diner(new Soul(this.player.x, this.player.y - 1), this.souls);
         }
     }
 
@@ -73,7 +73,7 @@ public class Diner extends World {
         if (player.y >= HEIGHT) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y + 1));
+            return new Diner(new Soul(this.player.x, this.player.y + 1), this.souls );
         }
     }
 
@@ -91,9 +91,20 @@ public class Diner extends World {
                 return this;
         }
     }
+    
+    public int countSaved(){
+        int count = 0;
+        for (int i = 0; i < souls.size(); i++){
+            Soul current = souls.get(i);
+            if (current.saved){
+                count = count + 1;
+            }
+        }
+        return count;
+    }
 
     public boolean WinHuh() {
-        return souls.isEmpty();
+        return (countSaved() == 4);
     }
 
     public WorldImage winner = new TextImage(new Posn(100, 100), "You Freed Us", 32, new Red());
@@ -105,12 +116,15 @@ public class Diner extends World {
         }
         World tempG = this;
         for (int i = 0; i < souls.size(); i++) {
-            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
+            Soul current = souls.get(i);
+            if (current.saved){}
+            else if (player.x == current.x && player.y == current.y) {
                 ArrayList<Ingredient> arr = new ArrayList();
                 Ingredient bun = new Ingredient(9, 21, "red", true);
                 arr.add(bun);
                 Order place = souls.get(i).order;
                 souls.remove(i);
+//                souls.set(i, new Soul(current.x, current.y ,current.order, true));
                 tempG = new Grid(arr, place, new Order(0, 0, 0, 0), this);
             } else {
             }
@@ -134,7 +148,8 @@ public class Diner extends World {
         int randoX = randStatNum(0, WIDTH);
         int randoY = randStatNum(0, HEIGHT);
         Soul play = new Soul(randoX, randoY);
-        return new Diner(play);
+        // CHANGE NULL!!
+        return new Diner(play, null);
     }
 
     public static void testDiner() {

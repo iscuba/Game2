@@ -27,14 +27,6 @@ public class Ingredient {
         this.stacked = s;
     }
 
-    public int getX() {
-        return this.x;
-    }
-
-    public int getY() {
-        return this.y;
-    }
-
     public Ingredient stackIt() {
         return new Ingredient(this.x, this.y, this.color, true);
     }

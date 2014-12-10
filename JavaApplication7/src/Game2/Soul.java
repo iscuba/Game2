@@ -5,8 +5,7 @@
  */
 package Game2;
 
-import javalib.colors.Blue;
-import javalib.colors.Red;
+import javalib.colors.*;
 import javalib.worldimages.DiskImage;
 import javalib.worldimages.Posn;
 
@@ -19,8 +18,9 @@ public class Soul {
     public int x;
     public int y;
     public Order order;
+    public boolean saved;
 
-    public Soul(int x, int y, Order wish) {
+    public Soul(int x, int y, Order wish, boolean saved) {
         this.x = x;
         this.y = y;
         this.order = wish;
@@ -33,10 +33,13 @@ public class Soul {
     }
 
     public DiskImage drawSoul() {
-        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Blue());
+        if (saved){
+            return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Green());
+        }
+        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Red());
     }
 
     public DiskImage drawPlayer() {
-        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Red());
+        return new DiskImage(new Posn(this.x * 20, this.y * 20), 10, new Blue());
     }
 }
