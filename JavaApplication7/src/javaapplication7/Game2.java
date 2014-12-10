@@ -7,6 +7,7 @@
 package javaapplication7;
 
 import java.util.ArrayList;
+import static javaapplication7.Diner.testDiner;
 import static javaapplication7.Grid.testGrid;
 /**
  *
@@ -19,7 +20,8 @@ public class Game2 {
      */
     public static void main(String[] args) {
         testGrid();
-        Diner game = new Diner(new Soul(0,15));
+        testDiner();
+        Diner game = new Diner(new Soul(1,15));
         game.bigBang(1080, 500, .1);
 //        ArrayList<Ingredient> arr = new ArrayList();
 //        Ingredient bun = new Ingredient(9,21,"white",true);

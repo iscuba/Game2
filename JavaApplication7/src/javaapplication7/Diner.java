@@ -38,44 +38,20 @@ public class Diner extends World {
         arr.add(soul2);
         arr.add(soul3);
         arr.add(soul4);
-        
+
         this.player = user;
         this.souls = arr;
     }
 
-    public World moveLeft() {
-        for (int i = 0; i < souls.size(); i++) {
-            // if the player is running into a soul make a new Grid game 
-            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-                souls.remove(i);
-                dinerWorld = new Diner(this.player);
-                ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "white", true);
-                arr.add(bun);
-                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
-                return game; 
-            }
-        }
-        if (player.x <= 1) {
+    public Diner moveLeft() {
+        if (player.x <= 0) {
             return this;
         } else {
             return new Diner(new Soul(this.player.x - 1, this.player.y));
         }
     }
 
-    public World moveRight() {
-        for (int i = 0; i < souls.size(); i++) {
-            // if the player is running into a soul make a new Grid game 
-            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-                souls.remove(i);
-                dinerWorld = new Diner(this.player);
-                ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "white", true);
-                arr.add(bun);
-                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
-                return game; 
-            }
-        }
+    public Diner moveRight() {
         if (player.x >= WIDTH) {
             return this;
         } else {
@@ -83,19 +59,7 @@ public class Diner extends World {
         }
     }
 
-    public World moveUp() {
-        for (int i = 0; i < souls.size(); i++) {
-            // if the player is running into a soul make a new Grid game 
-            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-                souls.remove(i);
-                dinerWorld = new Diner(this.player);
-                ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "white", true);
-                arr.add(bun);
-                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
-                return game; 
-            }
-        }
+    public Diner moveUp() {
         if (player.y <= 0) {
             return this;
         } else {
@@ -103,19 +67,7 @@ public class Diner extends World {
         }
     }
 
-    public World moveDown() {
-        for (int i = 0; i < souls.size(); i++) {
-            // if the player is running into a soul make a new Grid game 
-            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-                souls.remove(i);
-                dinerWorld = new Diner(this.player);
-                ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "white", true);
-                arr.add(bun);
-                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
-                return game; 
-            }
-        }
+    public Diner moveDown() {
         if (player.y >= HEIGHT) {
             return this;
         } else {
@@ -123,7 +75,7 @@ public class Diner extends World {
         }
     }
 
-    public World onKeyEvent(String ke) {
+    public Diner onKeyEvent(String ke) {
         switch (ke) {
             case "left":
                 return this.moveLeft();
@@ -138,13 +90,10 @@ public class Diner extends World {
         }
     }
     
-    
-//doesnt work 
-    public World onMouseClicked(Posn mouse) {
-        // Ugh why cant I do this in a for loop? 
+    public World onTick(){
         World tempG = this;
         for (int i = 0; i < souls.size(); i++) {
-            if (mouse == new Posn(souls.get(i).x, souls.get(i).y)) {
+            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
                 souls.remove(i);
                 ArrayList<Ingredient> arr = new ArrayList();
                 Ingredient bun = new Ingredient(9, 21, "white", true);
@@ -154,26 +103,12 @@ public class Diner extends World {
             }
         }
         return tempG;
-
     }
-
-//        for (int i = 0; i < souls.size(); i++) {
-//            // if the player is running into a soul make a new Grid game 
-//            if (player.x == souls.get(i).x && player.y == souls.get(i).y) {
-//                souls.remove(i);
-//                dinerWorld = new Diner(this.player, this.souls);
-//                ArrayList<Ingredient> arr = new ArrayList();
-//                Ingredient bun = new Ingredient(9, 21, "white", true);
-//                arr.add(bun);
-//                Grid game = new Grid(arr,souls.get(i).order, new Order(0,0,0,0), dinerWorld);   
-//                return game; 
-//            }
-//        }
     
     public WorldImage back = new RectangleImage(new Posn(0, 0), 620, 620, new Black());
-    
+
     public WorldImage makeImage() {
-        for (int i = 0; i < souls.size(); i++){
+        for (int i = 0; i < souls.size(); i++) {
             WorldImage temp = souls.get(i).drawSoul();
             back = new OverlayImages(back, temp);
         }
@@ -181,16 +116,47 @@ public class Diner extends World {
         back = new OverlayImages(back, s);
         return back;
     }
-    
-    public static Diner makeRandDiner(){
+
+    public static Diner makeRandDiner() {
         int randoX = randStatNum(0, WIDTH);
         int randoY = randStatNum(0, HEIGHT);
-        Soul play = new Soul(randoX,randoY); 
+        Soul play = new Soul(randoX, randoY);
         return new Diner(play);
     }
-    
-    public static void TestDiner(){
+
+    public static void testDiner() {
+        //tests the character moves in the directions: 
+        for (int i = 0; i < 100; i++) {
+            Diner diner88 = makeRandDiner();
+            Diner movedDiner = diner88.onKeyEvent("right");
+            if (!(diner88.player.x <= movedDiner.player.x)){
+                System.out.println("fix on tick Right");
+            }
+        }
         
+        for (int i = 0; i < 100; i++) {
+            Diner diner88 = makeRandDiner();
+            Diner movedDiner = diner88.onKeyEvent("left");
+            if (!(diner88.player.x >= movedDiner.player.x)){
+                System.out.println("fix on tick Left");
+            }
+        }
+        
+        for (int i = 0; i < 100; i++) {
+            Diner diner88 = makeRandDiner();
+            Diner movedDiner = diner88.onKeyEvent("up");
+            if (!(diner88.player.y >= movedDiner.player.y)){
+                System.out.println("fix on tick Up");
+            }
+        }
+        
+        for (int i = 0; i < 100; i++) {
+            Diner diner88 = makeRandDiner();
+            Diner movedDiner = diner88.onKeyEvent("down");
+            if (!(diner88.player.x <= movedDiner.player.x)){
+                System.out.println("fix on tick down");
+            }
+        }
     }
 
 }
