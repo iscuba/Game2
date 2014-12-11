@@ -20,6 +20,7 @@ import javalib.worldimages.TextImage;
  *
  * @author Isabella
  */
+ 
 public class Diner extends World {
 
     public Order gridBurger;
@@ -116,14 +117,14 @@ public class Diner extends World {
         for (int i = 0; i < souls.size(); i++) {
             Soul current = souls.get(i);
             if (current.saved){}
-            else if (player.x == current.x && player.y == current.y) {
+             if (player.x == current.x && player.y == current.y) {
                 ArrayList<Ingredient> arr = new ArrayList();
                 Ingredient bun = new Ingredient(9, 21, "white", true);
                 arr.add(bun);
                 Order place = souls.get(i).order;
-                souls.remove(i); 
+//                souls.remove(i); 
 //                souls.set(i, new Soul(current.x, current.y ,current.order, true));
-                tempG = new Grid(arr, place, new Order(0, 0, 0, 0), this);
+                tempG = new Grid(arr, place, new Order(0, 0, 0, 0), this, current);
             } else {
             }
         }

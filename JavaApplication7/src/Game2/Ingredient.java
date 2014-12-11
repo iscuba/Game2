@@ -31,13 +31,9 @@ public class Ingredient {
         return new Ingredient(this.x, this.y, this.color, true);
     }
 
-    public boolean onTop(Ingredient ing) {
-        return (this.x == ing.x && this.y - 1 == ing.y);
-    }
-
     public FrameImage drawIngredient() {
 //        return new FrameImage(new Posn(this.x * 10, this.y * 10), 60, 20, new Green());
-        switch(this.color){
+        switch (this.color) {
             case "green":
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Green());
             case "blue":
@@ -46,7 +42,7 @@ public class Ingredient {
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Yellow());
             case "red":
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Red());
-            default :
+            default:
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
         }
 
@@ -82,5 +78,15 @@ public class Ingredient {
 
     public static Ingredient makeStackIngredient(int x, int y) {
         return new Ingredient(x, y, randColor(), true);
+    }
+
+    public static void testIngredient() {
+        for (int i = 0; i < 100; i++) {
+            Ingredient randIng = makeRandIngredient();
+            Ingredient stackedIng = randIng.stackIt();
+            if (randIng.stacked && !stackedIng.stacked) {
+                System.out.println("stackIt needs fixing");
+            }
+        }
     }
 }

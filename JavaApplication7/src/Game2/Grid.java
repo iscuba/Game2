@@ -31,12 +31,14 @@ public class Grid extends World {
     public Diner oldWorld;
     public Order check;
     public ArrayList<Ingredient> stack;
+    public Soul soul;
 
-    public Grid(ArrayList<Ingredient> stack, Order o, Order c, Diner w) {
+    public Grid(ArrayList<Ingredient> stack, Order o, Order c, Diner w, Soul soul) {
         this.stack = stack;
         this.ticket = o;
         this.check = c;
         this.oldWorld = w;
+        this.soul = soul;
     }
 
     public WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
@@ -84,7 +86,7 @@ public class Grid extends World {
                 }
             }
         }
-        return new Grid(tempStack, this.ticket, this.check, this.oldWorld);
+        return new Grid(tempStack, this.ticket, this.check, this.oldWorld, this.soul);
     }
 
     public Grid moveStackRight() {
@@ -102,7 +104,7 @@ public class Grid extends World {
                 }
             }
         }
-        return new Grid(tempStack, this.ticket, this.check, this.oldWorld);
+        return new Grid(tempStack, this.ticket, this.check, this.oldWorld, this.soul);
     }
 
     public Grid dropRandIngredient() {
@@ -115,7 +117,7 @@ public class Grid extends World {
             addedStack.add(this.stack.get(i));
         }
         addedStack.add(newIng);
-        return new Grid(addedStack, this.ticket, this.check, this.oldWorld);
+        return new Grid(addedStack, this.ticket, this.check, this.oldWorld, this.soul);
         //       } else {
         //           return this;
         //      }
@@ -195,7 +197,7 @@ public class Grid extends World {
 
     //if they stacked more than 15 things without completeing the order 
     public boolean looseHuh() {
-        return countStacked() > 5;
+        return countStacked() > 15;
     }
 
     //changes the stack to include Ingredients which have been successfully caught by the user
@@ -216,14 +218,24 @@ public class Grid extends World {
             }
         }
         Order tempO = new Order(countGreen(), countBlue(), countYellow(), countRed());
-        return new Grid(tempStack, this.ticket, tempO, this.oldWorld);
+        return new Grid(tempStack, this.ticket, tempO, this.oldWorld, this.soul);
     }
 
     public World onTick() {
         if (looseHuh()) {
             return this.oldWorld;
         } else if (winHuh()) {
-            return this.oldWorld;
+            ArrayList<Soul> souls = new ArrayList<>();
+            for (int i=0 ; i < oldWorld.souls.size(); i++){
+                Soul current = oldWorld.souls.get(i);
+                if (!current.equals(soul)){
+                    souls.add(current);
+                }
+            }
+            Diner newDiner = new Diner(oldWorld.player, souls, oldWorld.gridBurger);
+            return newDiner;
+//            oldWorld.souls.remove(soul);
+//            return this.oldWorld;
         }
         return this.stackIngredients();
     }
@@ -253,7 +265,7 @@ public class Grid extends World {
             arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
         }
         //idk what to give it for order, or for the old world, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2),null );
+        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2),null,null );
     }
 
     public static Grid makeUnStackGrid() {
@@ -275,7 +287,7 @@ public class Grid extends World {
         //adds a block to the top of the stack that isnt "stacked" yet 
         arg.add(new Ingredient(randX, 20 - randHeight, Ingredient.randColor(), false));
         //idk what to give it for order, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null);
+        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null,null);
     }
 
     public static void testGrid() {
@@ -283,7 +295,7 @@ public class Grid extends World {
         ArrayList<Ingredient> arrg = new ArrayList<>();
         arrg.add(new Ingredient(3, 3, "blue", true));
         arrg.add(new Ingredient(3, 2, "blue", false));
-        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null);
+        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null,null);
         Grid crude = crude1.moveStackRight();
         Grid stCrude = crude.stackIngredients();
         //System.out.println("stackX for c is: "+crude.stackX+" and for stacked: "+ stCrude.stackX);
