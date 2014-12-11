@@ -6,6 +6,7 @@
 package Game2;
 
 import static Game2.Ingredient.randColor;
+//import Game2.Order.makeRandoOrder;
 import java.util.ArrayList;
 import java.util.Random;
 import javalib.colors.Black;
@@ -197,7 +198,7 @@ public class Grid extends World {
 
     //if they stacked more than 15 things without completeing the order 
     public boolean looseHuh() {
-        return countStacked() > 15;
+        return countStacked() >= 15;
     }
 
     //changes the stack to include Ingredients which have been successfully caught by the user
@@ -223,6 +224,18 @@ public class Grid extends World {
 
     public World onTick() {
         if (looseHuh()) {
+            //FIX THIS CONDITION 
+            ArrayList<Soul> souls = new ArrayList<>();
+            for (int i=0 ; i < oldWorld.souls.size(); i++){
+                Soul current = oldWorld.souls.get(i);
+                if (!current.equals(soul)){
+                    souls.add(current);
+                } else {
+                    //should I give it a new order?
+//                    Order newOrder = makeRandOrder();
+                    Soul saved = new Soul(soul.x,soul.y,soul.order,soul.saved);
+                }
+            }
             return this.oldWorld;
         } else if (winHuh()) {
             ArrayList<Soul> souls = new ArrayList<>();
@@ -230,7 +243,12 @@ public class Grid extends World {
                 Soul current = oldWorld.souls.get(i);
                 if (!current.equals(soul)){
                     souls.add(current);
-                }
+                } 
+                
+//                else {
+//                    Soul saved = new Soul(current.x, current.y, new Order(0,0,0,0), true);
+//                    souls.add(saved);
+//                }
             }
             Diner newDiner = new Diner(oldWorld.player, souls, oldWorld.gridBurger);
             return newDiner;

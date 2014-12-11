@@ -30,7 +30,7 @@ public class Order {
     }
 
     //returns random number from 1 - 5 inc
-    public static int randNum() {
+    public int randNum() {
         int max = 5;
         int min = 1;
         Random rando = new Random();
@@ -38,7 +38,7 @@ public class Order {
         return randomNum;
     }
 
-    public static Order makeRandOrder() {
+    public Order makeRandoOrder() {
         return new Order(randNum(), randNum(), randNum(), randNum());
     }
 

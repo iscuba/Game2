@@ -20,7 +20,6 @@ import javalib.worldimages.TextImage;
  *
  * @author Isabella
  */
- 
 public class Diner extends World {
 
     public Order gridBurger;
@@ -33,7 +32,7 @@ public class Diner extends World {
     public Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4), false);
     public Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 4), false);
     public Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1), false);
-    public Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3),false);
+    public Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3), false);
 
     public Diner(Soul user, ArrayList<Soul> souls, Order burger) {
         this.player = user;
@@ -45,7 +44,7 @@ public class Diner extends World {
         if (player.x <= 0) {
             return this;
         } else {
-            return new Diner( new Soul(this.player.x - 1, this.player.y), this.souls,this.gridBurger);
+            return new Diner(new Soul(this.player.x - 1, this.player.y), this.souls, this.gridBurger);
         }
     }
 
@@ -87,12 +86,12 @@ public class Diner extends World {
                 return this;
         }
     }
-    
-    public int countSaved(){
+
+    public int countSaved() {
         int count = 0;
-        for (int i = 0; i < souls.size(); i++){
+        for (int i = 0; i < souls.size(); i++) {
             Soul current = souls.get(i);
-            if (current.saved){
+            if (current.saved) {
                 count = count + 1;
             }
         }
@@ -106,7 +105,6 @@ public class Diner extends World {
 
     public WorldImage winner = new TextImage(new Posn(100, 100), "You Freed Us", 32, new Red());
 
-    
     public World onTick() {
 //        if(this.gridBurger)
         if (WinHuh()) {
@@ -116,8 +114,9 @@ public class Diner extends World {
         World tempG = this;
         for (int i = 0; i < souls.size(); i++) {
             Soul current = souls.get(i);
-            if (current.saved){}
-             if (player.x == current.x && player.y == current.y) {
+            if (current.saved) {
+            } else
+            if (player.x == current.x && player.y == current.y) {
                 ArrayList<Ingredient> arr = new ArrayList();
                 Ingredient bun = new Ingredient(9, 21, "white", true);
                 arr.add(bun);
