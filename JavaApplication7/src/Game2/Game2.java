@@ -23,7 +23,7 @@ public class Game2 {
         testIngredient();
         testGrid();
         testDiner();
-        ArrayList<Soul> souls = new ArrayList<Soul>();        
+        ArrayList<Soul> souls = new ArrayList<>();        
 //        Soul soul1 = new Soul(7, 3, new Order(1, 2, 3, 4), false);
 //        Soul soul2 = new Soul(10, 5, new Order(4, 3, 1, 2), false);
 //        Soul soul3 = new Soul(13, 11, new Order(3, 2, 0, 1), false);
@@ -40,7 +40,7 @@ public class Game2 {
         souls.add(soul3);
         souls.add(soul4);
         Diner game = new Diner(new Soul(1, 15), souls,null);
-        game.bigBang(1080, 500, .1);
+        game.bigBang(1080, 500, .15);
 //        ArrayList<Ingredient> arr = new ArrayList();
 //        Ingredient bun = new Ingredient(9,21,"white",true);
 //        arr.add(bun);

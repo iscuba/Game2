@@ -9,14 +9,8 @@ import static Game2.Ingredient.randColor;
 //import Game2.Order.makeRandoOrder;
 import java.util.ArrayList;
 import java.util.Random;
-import javalib.colors.Black;
-import javalib.colors.Blue;
-import javalib.colors.Red;
-import javalib.worldimages.FrameImage;
-import javalib.worldimages.OverlayImages;
-import javalib.worldimages.Posn;
-import javalib.worldimages.RectangleImage;
-import javalib.worldimages.WorldImage;
+import javalib.colors.*;
+import javalib.worldimages.*;
 import javalib.funworld.*;
 import javalib.worldimages.TextImage;
 
@@ -43,12 +37,15 @@ public class Grid extends World {
     }
 
     public WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
-    public WorldImage frame = new FrameImage(new Posn(0, 0), 780, 860, new Blue());
-    public WorldImage backdrop = new OverlayImages(back, frame);
-//    public String mustStack = ("Please Stack: " + ticket.blue+ " blue "+ ticket.green+
+    public WorldImage frame = new FrameImage(new Posn(0, 0), 781, 861, new Red());
+    public WorldImage lostSoul = new DiskImage(new Posn(780, 340), 10, new Blue());
+    public WorldImage backframe = new OverlayImages(back, frame);
+    public WorldImage backdrop = new OverlayImages(backframe, lostSoul);
+    public String mustStack = "Hello I am a lost soul tied to this world. Please free me by stacking:";
+//            ("Please Stack: " + ticket.blue+ " blue "+ ticket.green+
 //            " green "+ticket.red+" red "+ticket.yellow+" yellow");
-//    public WorldImage mustStackImage = new TextImage(new Posn(780, 330), mustStack, new Red());
-//    public WorldImage backScore = new OverlayImages(backdrop, mustStackImage);
+    public WorldImage mustStackImage = new TextImage(new Posn(780, 230), mustStack, new Red());
+    public WorldImage backScore = new OverlayImages(backdrop, mustStackImage);
 //    public String score = "Stacked: " + check.blue+ " blue "+ check.green+
 //            " green "+check.red+" red "+ check.yellow+" yellow";;
 //    public WorldImage scoreBoard = new TextImage(new Posn(780,430),score,new Red());
@@ -57,11 +54,11 @@ public class Grid extends World {
     public WorldImage makeImage() {
         for (int i = 0; i < stack.size(); i++) {
             WorldImage b = stack.get(i).drawIngredient();
-            backdrop = new OverlayImages(backdrop, b);
+            backScore = new OverlayImages(backScore, b);
         }
         //WorldImage score = new TextImage(new Posn(230, 600), "Score: " + stack.size(), 13, -1, new Red());
         //return new OverlayImages(backdrop, score);
-        return backdrop;
+        return backScore;
 
     }
 
@@ -109,8 +106,6 @@ public class Grid extends World {
     }
 
     public Grid dropRandIngredient() {
-        //       int drophuh = randNum(1, 5);
-        //       if (drophuh == 3) {
         int randoX = randNum(1, 18);
         Ingredient newIng = new Ingredient(randoX, 1, randColor(), false);
         ArrayList<Ingredient> addedStack = new ArrayList();
@@ -119,9 +114,6 @@ public class Grid extends World {
         }
         addedStack.add(newIng);
         return new Grid(addedStack, this.ticket, this.check, this.oldWorld, this.soul);
-        //       } else {
-        //           return this;
-        //      }
     }
 
     public Grid onKeyEvent(String ke) {
@@ -198,7 +190,7 @@ public class Grid extends World {
 
     //if they stacked more than 15 things without completeing the order 
     public boolean looseHuh() {
-        return countStacked() >= 15;
+        return countStacked() > 15;
     }
 
     //changes the stack to include Ingredients which have been successfully caught by the user
@@ -224,19 +216,9 @@ public class Grid extends World {
 
     public World onTick() {
         if (looseHuh()) {
-            //FIX THIS CONDITION 
-            ArrayList<Soul> souls = new ArrayList<>();
-            for (int i=0 ; i < oldWorld.souls.size(); i++){
-                Soul current = oldWorld.souls.get(i);
-                if (!current.equals(soul)){
-                    souls.add(current);
-                } else {
-                    //should I give it a new order?
-//                    Order newOrder = makeRandOrder();
-                    Soul saved = new Soul(soul.x,soul.y,soul.order,soul.saved);
-                }
-            }
-            return this.oldWorld;
+            Soul newPlayer = new Soul(oldWorld.player.x -1, oldWorld.player.y -1);
+            Diner newDiner = new Diner(newPlayer, oldWorld.souls, oldWorld.gridBurger);
+            return newDiner;
         } else if (winHuh()) {
             ArrayList<Soul> souls = new ArrayList<>();
             for (int i=0 ; i < oldWorld.souls.size(); i++){
@@ -244,11 +226,6 @@ public class Grid extends World {
                 if (!current.equals(soul)){
                     souls.add(current);
                 } 
-                
-//                else {
-//                    Soul saved = new Soul(current.x, current.y, new Order(0,0,0,0), true);
-//                    souls.add(saved);
-//                }
             }
             Diner newDiner = new Diner(oldWorld.player, souls, oldWorld.gridBurger);
             return newDiner;

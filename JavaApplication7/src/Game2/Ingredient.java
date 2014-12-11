@@ -9,6 +9,8 @@ import java.util.Random;
 import javalib.colors.*;
 import javalib.worldimages.FrameImage;
 import javalib.worldimages.Posn;
+import javalib.worldimages.RectangleImage;
+import javalib.worldimages.WorldImage;
 
 /**
  *
@@ -31,7 +33,7 @@ public class Ingredient {
         return new Ingredient(this.x, this.y, this.color, true);
     }
 
-    public FrameImage drawIngredient() {
+    public WorldImage drawIngredient() {
 //        return new FrameImage(new Posn(this.x * 10, this.y * 10), 60, 20, new Green());
         switch (this.color) {
             case "green":
@@ -43,7 +45,7 @@ public class Ingredient {
             case "red":
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Red());
             default:
-                return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
+                return new RectangleImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
         }
 
     }
