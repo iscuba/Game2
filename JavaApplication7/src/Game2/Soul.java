@@ -24,6 +24,7 @@ public class Soul {
         this.x = x;
         this.y = y;
         this.order = wish;
+        this.saved = saved;
     }
 
     //used to make the User character 

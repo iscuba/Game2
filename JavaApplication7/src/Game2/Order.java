@@ -30,7 +30,7 @@ public class Order {
     }
 
     //returns random number from 1 - 5 inc
-    public int randNum() {
+    public static int randNum() {
         int max = 5;
         int min = 1;
         Random rando = new Random();
@@ -38,8 +38,17 @@ public class Order {
         return randomNum;
     }
 
-    public Order makeRandoOrder() {
+    public static Order makeRandOrder() {
         return new Order(randNum(), randNum(), randNum(), randNum());
+    }
+    
+    public static void testOrder(){
+        for (int i = 0; i<100; i++){
+            Order testOrder = makeRandOrder();
+            if (!testOrder.filled(testOrder)){
+                System.out.println("need to check Order: filled");
+            }
+        }
     }
 
 }

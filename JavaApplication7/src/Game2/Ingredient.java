@@ -34,7 +34,6 @@ public class Ingredient {
     }
 
     public WorldImage drawIngredient() {
-//        return new FrameImage(new Posn(this.x * 10, this.y * 10), 60, 20, new Green());
         switch (this.color) {
             case "green":
                 return new FrameImage(new Posn(this.x * 20, this.y * 20), 60, 20, new Green());

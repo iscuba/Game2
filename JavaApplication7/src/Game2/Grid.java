@@ -36,29 +36,30 @@ public class Grid extends World {
         this.soul = soul;
     }
 
-    public WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
-    public WorldImage frame = new FrameImage(new Posn(0, 0), 781, 861, new Red());
-    public WorldImage lostSoul = new DiskImage(new Posn(780, 340), 10, new Blue());
-    public WorldImage backframe = new OverlayImages(back, frame);
-    public WorldImage backdrop = new OverlayImages(backframe, lostSoul);
-    public String mustStack = "Hello I am a lost soul tied to this world. Please free me by stacking:";
-//            ("Please Stack: " + ticket.blue+ " blue "+ ticket.green+
-//            " green "+ticket.red+" red "+ticket.yellow+" yellow");
-    public WorldImage mustStackImage = new TextImage(new Posn(780, 230), mustStack, new Red());
-    public WorldImage backScore = new OverlayImages(backdrop, mustStackImage);
-//    public String score = "Stacked: " + check.blue+ " blue "+ check.green+
-//            " green "+check.red+" red "+ check.yellow+" yellow";;
-//    public WorldImage scoreBoard = new TextImage(new Posn(780,430),score,new Red());
-//    public WorldImage backScoreBoard = new OverlayImages(backScore,scoreBoard);
-//            
     public WorldImage makeImage() {
+        WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
+        WorldImage frame = new FrameImage(new Posn(0, 0), 781, 861, new Red());
+        WorldImage lostSoul = new DiskImage(new Posn(740, 340), 10, new Blue());
+        WorldImage backframe = new OverlayImages(back, frame);
+        WorldImage backdrop = new OverlayImages(backframe, lostSoul);
+        String mustStack1 = "Hello I am a lost soul tied to this world. Please free me by stacking: "
+                + ticket.blue + " blue, " + ticket.green + " green, " + ticket.red
+                + " red, and " + ticket.yellow + " yellow";
+        WorldImage Instructions = new TextImage(new Posn(740, 285),
+                "But please be careful. If you stack more than 15 blocks I won't be freed", new Red());
+        WorldImage mustStackImage = new TextImage(new Posn(740, 230), mustStack1, new Red());
+        WorldImage mustStack = new OverlayImages(mustStackImage, Instructions);
+        WorldImage backScore = new OverlayImages(backdrop, mustStack);
+        String score = "Stacked: " + check.blue + " blue " + check.green
+                + " green " + check.red + " red " + check.yellow + " yellow";;
+        WorldImage scoreBoard = new TextImage(new Posn(740, 430), score, new Red());
+        WorldImage backScoreBoard = new OverlayImages(backScore, scoreBoard);
+
         for (int i = 0; i < stack.size(); i++) {
             WorldImage b = stack.get(i).drawIngredient();
-            backScore = new OverlayImages(backScore, b);
+            backScoreBoard = new OverlayImages(backScoreBoard, b);
         }
-        //WorldImage score = new TextImage(new Posn(230, 600), "Score: " + stack.size(), 13, -1, new Red());
-        //return new OverlayImages(backdrop, score);
-        return backScore;
+        return backScoreBoard;
 
     }
 
@@ -199,7 +200,6 @@ public class Grid extends World {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < stack.size(); i++) {
             Ingredient current = stack.get(i);
-            // the falling ingredient is caught by the bun
             if (!current.stacked) {
                 if (stack.get(0).x == current.x && 21 - countStacked() == current.y) {
                     tempStack.add(current.stackIt());
@@ -216,29 +216,27 @@ public class Grid extends World {
 
     public World onTick() {
         if (looseHuh()) {
-            Soul newPlayer = new Soul(oldWorld.player.x -1, oldWorld.player.y -1);
-            Diner newDiner = new Diner(newPlayer, oldWorld.souls, oldWorld.gridBurger);
+            Soul newPlayer = new Soul(oldWorld.player.x - 1, oldWorld.player.y - 1);
+            Diner newDiner = new Diner(newPlayer, oldWorld.souls);
             return newDiner;
         } else if (winHuh()) {
             ArrayList<Soul> souls = new ArrayList<>();
-            for (int i=0 ; i < oldWorld.souls.size(); i++){
+            for (int i = 0; i < oldWorld.souls.size(); i++) {
                 Soul current = oldWorld.souls.get(i);
-                if (!current.equals(soul)){
+                if (!current.equals(soul)) {
                     souls.add(current);
-                } 
+                } else {
+                    Soul savedSoul = new Soul(current.x, current.y, current.order, true);
+                    souls.add(savedSoul);
+                }
             }
-            Diner newDiner = new Diner(oldWorld.player, souls, oldWorld.gridBurger);
+            Diner newDiner = new Diner(oldWorld.player, souls);
             return newDiner;
-//            oldWorld.souls.remove(soul);
-//            return this.oldWorld;
         }
         return this.stackIngredients();
     }
 
     public static int randStatNum(int min, int max) {
-        if (min > max) {
-            throw new RuntimeException("min " + min + " must be smaller than max " + max);
-        }
         Random rando = new Random();
         int randomNum = rando.nextInt((max - min) + 1) + min;
         return randomNum;
@@ -260,7 +258,7 @@ public class Grid extends World {
             arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
         }
         //idk what to give it for order, or for the old world, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2),null,null );
+        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
     }
 
     public static Grid makeUnStackGrid() {
@@ -282,7 +280,7 @@ public class Grid extends World {
         //adds a block to the top of the stack that isnt "stacked" yet 
         arg.add(new Ingredient(randX, 20 - randHeight, Ingredient.randColor(), false));
         //idk what to give it for order, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null,null);
+        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
     }
 
     public static void testGrid() {
@@ -290,7 +288,7 @@ public class Grid extends World {
         ArrayList<Ingredient> arrg = new ArrayList<>();
         arrg.add(new Ingredient(3, 3, "blue", true));
         arrg.add(new Ingredient(3, 2, "blue", false));
-        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null,null);
+        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
         Grid crude = crude1.moveStackRight();
         Grid stCrude = crude.stackIngredients();
         //System.out.println("stackX for c is: "+crude.stackX+" and for stacked: "+ stCrude.stackX);
