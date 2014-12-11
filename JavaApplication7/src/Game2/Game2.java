@@ -31,7 +31,7 @@ public class Game2 {
         souls.add(soul2);
         souls.add(soul3);
         souls.add(soul4);
-        Diner game = new Diner(new Soul(1, 15), souls);
+        Diner game = new Diner(new Soul(1, 15), souls,null);
         game.bigBang(1080, 500, .1);
 //        ArrayList<Ingredient> arr = new ArrayList();
 //        Ingredient bun = new Ingredient(9,21,"white",true);

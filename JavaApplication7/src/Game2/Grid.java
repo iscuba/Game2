@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import javalib.colors.Black;
 import javalib.colors.Blue;
+import javalib.colors.Red;
 import javalib.worldimages.FrameImage;
 import javalib.worldimages.OverlayImages;
 import javalib.worldimages.Posn;
 import javalib.worldimages.RectangleImage;
 import javalib.worldimages.WorldImage;
 import javalib.funworld.*;
+import javalib.worldimages.TextImage;
 
 /**
  *
@@ -40,7 +42,15 @@ public class Grid extends World {
     public WorldImage back = new RectangleImage(new Posn(0, 0), 780, 860, new Black());
     public WorldImage frame = new FrameImage(new Posn(0, 0), 780, 860, new Blue());
     public WorldImage backdrop = new OverlayImages(back, frame);
-
+//    public String mustStack = ("Please Stack: " + ticket.blue+ " blue "+ ticket.green+
+//            " green "+ticket.red+" red "+ticket.yellow+" yellow");
+//    public WorldImage mustStackImage = new TextImage(new Posn(780, 330), mustStack, new Red());
+//    public WorldImage backScore = new OverlayImages(backdrop, mustStackImage);
+//    public String score = "Stacked: " + check.blue+ " blue "+ check.green+
+//            " green "+check.red+" red "+ check.yellow+" yellow";;
+//    public WorldImage scoreBoard = new TextImage(new Posn(780,430),score,new Red());
+//    public WorldImage backScoreBoard = new OverlayImages(backScore,scoreBoard);
+//            
     public WorldImage makeImage() {
         for (int i = 0; i < stack.size(); i++) {
             WorldImage b = stack.get(i).drawIngredient();

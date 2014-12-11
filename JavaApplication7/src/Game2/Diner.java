@@ -22,7 +22,7 @@ import javalib.worldimages.TextImage;
  */
 public class Diner extends World {
 
-    public World dinerWorld;
+    public Order gridBurger;
     public Soul player;
     public ArrayList<Soul> souls;
 
@@ -34,22 +34,17 @@ public class Diner extends World {
     public Soul soul3 = new Soul(13, 11, new Order(6, 2, 0, 1), false);
     public Soul soul4 = new Soul(2, 4, new Order(1, 5, 2, 3),false);
 
-    public Diner(Soul user, ArrayList<Soul> souls) {
-        ArrayList<Soul> arr = new ArrayList();
-        arr.add(soul1);
-        arr.add(soul2);
-        arr.add(soul3);
-        arr.add(soul4);
-
+    public Diner(Soul user, ArrayList<Soul> souls, Order burger) {
         this.player = user;
         this.souls = souls;
+        this.gridBurger = burger;
     }
 
     public Diner moveLeft() {
         if (player.x <= 0) {
             return this;
         } else {
-            return new Diner( new Soul(this.player.x - 1, this.player.y), this.souls);
+            return new Diner( new Soul(this.player.x - 1, this.player.y), this.souls,this.gridBurger);
         }
     }
 
@@ -57,7 +52,7 @@ public class Diner extends World {
         if (player.x >= WIDTH) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x + 1, this.player.y), this.souls);
+            return new Diner(new Soul(this.player.x + 1, this.player.y), this.souls, this.gridBurger);
         }
     }
 
@@ -65,7 +60,7 @@ public class Diner extends World {
         if (player.y <= 0) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y - 1), this.souls);
+            return new Diner(new Soul(this.player.x, this.player.y - 1), this.souls, this.gridBurger);
         }
     }
 
@@ -73,7 +68,7 @@ public class Diner extends World {
         if (player.y >= HEIGHT) {
             return this;
         } else {
-            return new Diner(new Soul(this.player.x, this.player.y + 1), this.souls );
+            return new Diner(new Soul(this.player.x, this.player.y + 1), this.souls, this.gridBurger);
         }
     }
 
@@ -104,12 +99,15 @@ public class Diner extends World {
     }
 
     public boolean WinHuh() {
-        return (countSaved() == 4);
+        return souls.isEmpty();
+//        return (countSaved() == 4);
     }
 
     public WorldImage winner = new TextImage(new Posn(100, 100), "You Freed Us", 32, new Red());
 
+    
     public World onTick() {
+//        if(this.gridBurger)
         if (WinHuh()) {
             back = new OverlayImages(back, winner);
             return this;
@@ -120,10 +118,10 @@ public class Diner extends World {
             if (current.saved){}
             else if (player.x == current.x && player.y == current.y) {
                 ArrayList<Ingredient> arr = new ArrayList();
-                Ingredient bun = new Ingredient(9, 21, "red", true);
+                Ingredient bun = new Ingredient(9, 21, "white", true);
                 arr.add(bun);
                 Order place = souls.get(i).order;
-                souls.remove(i);
+                souls.remove(i); 
 //                souls.set(i, new Soul(current.x, current.y ,current.order, true));
                 tempG = new Grid(arr, place, new Order(0, 0, 0, 0), this);
             } else {
@@ -149,7 +147,7 @@ public class Diner extends World {
         int randoY = randStatNum(0, HEIGHT);
         Soul play = new Soul(randoX, randoY);
         // CHANGE NULL!!
-        return new Diner(play, null);
+        return new Diner(play, null, null);
     }
 
     public static void testDiner() {
