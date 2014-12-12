@@ -6,6 +6,7 @@
 package Game2;
 
 import static Game2.Ingredient.randColor;
+import static Game2.Order.makeRandOrder;
 //import Game2.Order.makeRandoOrder;
 import java.util.ArrayList;
 import java.util.Random;
@@ -189,13 +190,11 @@ public class Grid extends World {
         return check.filled(ticket);
     }
 
-    //if they stacked more than 15 things without completeing the order 
     public boolean looseHuh() {
         return countStacked() > 15;
     }
 
-    //changes the stack to include Ingredients which have been successfully caught by the user
-    //and moves the unstacked ingredients down the screen 
+ 
     public Grid stackIngredients() {
         ArrayList<Ingredient> tempStack = new ArrayList<>();
         for (int i = 0; i < stack.size(); i++) {
@@ -215,11 +214,13 @@ public class Grid extends World {
     }
 
     public World onTick() {
-        if (looseHuh()) {
+        //dont know how to test loosing and winning conditions of on tick 
+        //      I guess maybe make a random winning grid? does that defeat the purpose?
+        if (this.looseHuh()) {
             Soul newPlayer = new Soul(oldWorld.player.x - 1, oldWorld.player.y - 1);
             Diner newDiner = new Diner(newPlayer, oldWorld.souls);
             return newDiner;
-        } else if (winHuh()) {
+        } else if (this.winHuh()) {
             ArrayList<Soul> souls = new ArrayList<>();
             for (int i = 0; i < oldWorld.souls.size(); i++) {
                 Soul current = oldWorld.souls.get(i);
@@ -245,106 +246,222 @@ public class Grid extends World {
     public static Grid makeRandGrid() {
         ArrayList<Ingredient> arg = new ArrayList<>();
         int randX = randStatNum(1, 18);
-        Ingredient bun = new Ingredient(randX, 21, Ingredient.randColor(), true);
+        Ingredient bun = new Ingredient(randX, 21, "white", true);
         arg.add(bun);
-        int randHeight = randStatNum(1, 15);
+        int randHeight = randStatNum(1, 10);
+        int green = 0;
+        int blue = 0;
+        int yellow = 0;
+        int red = 0;
         for (int i = 0; i < randHeight; i++) {
-            arg.add(new Ingredient(randX, 20 - i, Ingredient.randColor(), true));
+            String randColor = randColor();
+            switch (randColor) {
+                case "blue":
+                    blue = blue + 1;
+                case "green":
+                    green = green + 1;
+                case "yellow":
+                    yellow = yellow + 1;
+                case "red":
+                    red = red + 1;
+                default:
+            }
+            arg.add(new Ingredient(randX, 20 - i, randColor, true));
         }
-        int randFall = randStatNum(1, 5);
+        int randFall = randStatNum(1, 7);
         for (int i = 0; i < randFall; i++) {
             int randx = randStatNum(1, 18);
             int randy = randStatNum(1, 20);
-            arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
+            arg.add(new Ingredient(randx, randy, randColor(), false));
         }
         //idk what to give it for order, or for the old world, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
-    }
-
-    public static Grid makeUnStackGrid() {
-        ArrayList<Ingredient> arg = new ArrayList<>();
-        int randX = randStatNum(1, 18);
-        Ingredient bun = new Ingredient(randX, 21, Ingredient.randColor(), true);
-        arg.add(bun);
-        int randHeight = randStatNum(1, 15);
-        for (int i = 0; i < randHeight; i++) {
-            arg.add(new Ingredient(randX, 20 - i, Ingredient.randColor(), true));
-        }
-        int randFall = randStatNum(1, 5);
-        for (int i = 0; i < randFall; i++) {
-            int randx = randStatNum(1, 18);
-            int randy = randStatNum(1, 20);
-            arg.add(new Ingredient(randx, randy, Ingredient.randColor(), false));
-
-        }
-        //adds a block to the top of the stack that isnt "stacked" yet 
-        arg.add(new Ingredient(randX, 20 - randHeight, Ingredient.randColor(), false));
-        //idk what to give it for order, but for right now whatever. 
-        return new Grid(arg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
+        return new Grid(arg, new Order(5, 5, 5, 5), new Order(green, blue, yellow, green), null, null);
     }
 
     public static void testGrid() {
-        //crude test for stackIngredients:
-        ArrayList<Ingredient> arrg = new ArrayList<>();
-        arrg.add(new Ingredient(3, 3, "blue", true));
-        arrg.add(new Ingredient(3, 2, "blue", false));
-        Grid crude1 = new Grid(arrg, new Order(2, 2, 2, 2), new Order(2, 2, 2, 2), null, null);
-        Grid crude = crude1.moveStackRight();
-        Grid stCrude = crude.stackIngredients();
-        //System.out.println("stackX for c is: "+crude.stackX+" and for stacked: "+ stCrude.stackX);
-        System.out.println("stack's height is: " + crude.stack.size() + " Stacked should be +1: " + stCrude.stack.size());
 
-        //test moving left and right:
-        Grid testGrid12 = makeRandGrid();
-        int height2 = testGrid12.stack.size() - 1;
-        Grid movedRight12 = testGrid12.onKeyEvent("right");
-        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved right: " + movedRight12.stack.get(height2).x);
-        Grid movedLeft12 = testGrid12.onKeyEvent("left");
-        System.out.println("stack's X is: " + testGrid12.stack.get(height2).x + " and moved left: " + movedLeft12.stack.get(height2).x);
-        Grid unStack = makeUnStackGrid();
-        Grid stackedGrid = unStack.stackIngredients();
-        System.out.println("height before stacking : " + unStack.stack.size() + " after should be +1 : " + stackedGrid.stack.size());
-
-        //testing for moving the ingredients down the screen every second 
-        //testing to move the grid right:
+        //MoveStackLeft:
         for (int i = 0; i > 100; i++) {
-            Grid testGrid1 = makeRandGrid();
-            int height = testGrid1.stack.size() - 1;
-            Grid movedRight1 = testGrid1.onKeyEvent("right");
-            if (!(testGrid1.stack.get(height).x <= movedRight1.stack.get(height).x)) {
-                System.out.println("move grid right needs checking");
-            }
-        }
-
-        //testing to move the grid left: 
-        for (int i = 0; i > 100; i++) {
-            Grid testGrid1 = makeRandGrid();
-            int height = testGrid1.stack.size() - 1;
-            Grid movedLeft1 = testGrid1.onKeyEvent("left");
-            if (!(testGrid1.stack.get(height).x >= movedLeft1.stack.get(height).x)) {
-                System.out.println("move grid right needs checking");
-            }
-        }
-
-        //testing to see if a new ingredient drops when down is pressed 
-        for (int i = 0; i < 100; i++) {
             Grid testGrid = makeRandGrid();
-            int stackSize = testGrid.stack.size();
-            Grid addedIng = testGrid.onKeyEvent("down");
-            int addedStackSize = addedIng.stack.size();
-            if (!(stackSize <= addedStackSize)) {
-                System.out.println("on key event down needs checking");
+            int height = testGrid.stack.size() - 1;
+            Grid movedLeft = testGrid.moveStackLeft();
+            if (!(testGrid.stack.get(height).x <= movedLeft.stack.get(height).x)) {
+                System.out.println("Grid: move grid right needs checking");
             }
         }
 
-        //test to see if dropRandIngredient works 
+        //MoveStackRight:
+        for (int i = 0; i > 100; i++) {
+            Grid testGrid = makeRandGrid();
+            int height = testGrid.stack.size() - 1;
+            Grid movedRight = testGrid.moveStackRight();
+            if (!(testGrid.stack.get(height).x <= movedRight.stack.get(height).x)) {
+                System.out.println("Grid: move grid right needs checking");
+            }
+        }
+
+        //DropRandIngredient:  
         for (int i = 0; i < 100; i++) {
             Grid testGrid = makeRandGrid();
             int stackSize = testGrid.stack.size();
             Grid addedIng = testGrid.dropRandIngredient();
             int addedStackSize = addedIng.stack.size();
             if (!(stackSize <= addedStackSize)) {
-                System.out.println("dropRandIngredient needs checking");
+                System.out.println("Grid: dropRandIngredient needs checking");
+            }
+        }
+
+        //OnKeyEvent:
+        //move the grid right :
+        for (int i = 0; i > 100; i++) {
+            Grid testGrid = makeRandGrid();
+            int height = testGrid.stack.size() - 1;
+            Grid movedRight = testGrid.onKeyEvent("right");
+            if (!(testGrid.stack.get(height).x <= movedRight.stack.get(height).x)) {
+                System.out.println("Grid: move grid right needs checking");
+            }
+        }
+
+        //move the grid left: 
+        for (int i = 0; i > 100; i++) {
+            Grid testGrid = makeRandGrid();
+            int height = testGrid.stack.size() - 1;
+            Grid movedLeft = testGrid.onKeyEvent("left");
+            if (!(testGrid.stack.get(height).x >= movedLeft.stack.get(height).x)) {
+                System.out.println("Grid: move grid right needs checking");
+            }
+        }
+
+        //down arrow pressed: 
+        for (int i = 0; i < 100; i++) {
+            Grid testGrid = makeRandGrid();
+            int stackSize = testGrid.stack.size();
+            Grid addedIng = testGrid.onKeyEvent("down");
+            int addedStackSize = addedIng.stack.size();
+            if (!(stackSize <= addedStackSize)) {
+                System.out.println("Grid: on key event down needs checking");
+            }
+        }
+
+        //StackIngredients: 
+        for (int i = 0; i < 100; i++) {
+            Grid testGrid = makeRandGrid();
+            Grid stackedGrid = testGrid.stackIngredients();
+            int stackSize = testGrid.stack.size();
+            for (int j = 0; j < stackSize; j++) {
+                Ingredient current = testGrid.stack.get(j);
+                Ingredient stackedCurrent = stackedGrid.stack.get(j);
+                // the Ing was falling
+                if (!current.stacked && !stackedCurrent.stacked) {
+                    if (!(current.y < stackedCurrent.y)) {
+                        System.out.println("Grid: stackIngredients needs checking");
+                    }
+                    // the Ing was not falling
+                    //needs to have been stacked 
+                } else if (current.stacked && !stackedCurrent.stacked) {
+                    System.out.println("Grid: stackIngredients is not stacking");
+                }
+            }
+        }
+
+        //OnTick:
+        for (int i = 0; i < 100; i++) {
+            Grid testGrid = makeRandGrid();
+            Grid stackedGrid = testGrid.stackIngredients();
+            int stackSize = testGrid.stack.size();
+            for (int j = 0; j < stackSize; j++) {
+                Ingredient current = testGrid.stack.get(j);
+                Ingredient stackedCurrent = stackedGrid.stack.get(j);
+                // the Ing was falling
+                if (!current.stacked && !stackedCurrent.stacked) {
+                    if (!(current.y < stackedCurrent.y)) {
+                        System.out.println("Grid: stackIngredients needs checking");
+                    }
+                    // the Ing was not falling
+                    //needs to have been stacked 
+                } else if (current.stacked && !stackedCurrent.stacked) {
+                    System.out.println("Grid: stackIngredients is not stacking");
+                }
+            }
+        }
+        
+        //CountGreen:
+        for (int i = 0; i < 100; i++) {
+            ArrayList<Ingredient> array = new ArrayList<>();
+            int colorNum = randStatNum(1,10);
+            int stackX = randStatNum(1,18);
+            for (int j = 0; j < colorNum; j++){
+                Ingredient color = new Ingredient(stackX, 20 - j, "green", true);
+                array.add(color);
+            }
+            Grid colorGrid = new Grid(array, new Order(colorNum + 1,1,1,1), new Order(colorNum,0,0,0), 
+                    new Diner(new Soul (0,0), new ArrayList<Soul>()), new Soul(0,0));
+            if (colorGrid.countGreen() != colorNum) {
+                System.out.println("Grid: countGreen not working");
+            }
+        }
+        
+        //CountBlue:
+        for (int i = 0; i < 100; i++) {
+            ArrayList<Ingredient> array = new ArrayList<>();
+            int colorNum = randStatNum(1,10);
+            int stackX = randStatNum(1,18);
+            for (int j = 0; j < colorNum; j++){
+                Ingredient color = new Ingredient(stackX, 20 - j, "blue", true);
+                array.add(color);
+            }
+            Grid colorGrid = new Grid(array, new Order(1,1 + colorNum,1,1), new Order(0,colorNum,0,0), 
+                    new Diner(new Soul (0,0), new ArrayList<Soul>()), new Soul(0,0));
+            if (colorGrid.countBlue() != colorNum) {
+                System.out.println("Grid: countBlue not working");
+            }
+        }
+        
+        //CountYellow:
+        for (int i = 0; i < 100; i++) {
+            ArrayList<Ingredient> array = new ArrayList<>();
+            int colorNum = randStatNum(1,10);
+            int stackX = randStatNum(1,18);
+            for (int j = 0; j < colorNum; j++){
+                Ingredient color = new Ingredient(stackX, 20 - j, "yellow", true);
+                array.add(color);
+            }
+            Grid colorGrid = new Grid(array, new Order(1,1,1 + colorNum,1), new Order(0,0,colorNum,0), 
+                    new Diner(new Soul (0,0), new ArrayList<Soul>()), new Soul(0,0));
+            if (colorGrid.countYellow() != colorNum) {
+                System.out.println("Grid: countYellow not working");
+            }
+        }
+        
+        //CountRed:
+        for (int i = 0; i < 100; i++) {
+            ArrayList<Ingredient> array = new ArrayList<>();
+            int colorNum = randStatNum(1,10);
+            int stackX = randStatNum(1,18);
+            for (int j = 0; j < colorNum; j++){
+                Ingredient color = new Ingredient(stackX, 20 - j, "red", true);
+                array.add(color);
+            }
+            Grid colorGrid = new Grid(array, new Order(1,1,1,1 + colorNum), new Order(0,0,0,colorNum), 
+                    new Diner(new Soul (0,0), new ArrayList<Soul>()), new Soul(0,0));
+            if (colorGrid.countRed() != colorNum) {
+                System.out.println("Grid: countRed not working");
+            }
+        }
+        
+        //CountStacked:
+        for (int i = 0; i < 100; i++) {
+            ArrayList<Ingredient> array = new ArrayList<>();
+            int stackNum = randStatNum(1,10);
+            int stackX = randStatNum(1,18);
+            for (int j = 0; j < stackNum; j++){
+                Ingredient Ing = new Ingredient(stackX, 20 - j, randColor(), true);
+                array.add(Ing);
+            }
+            Grid colorGrid = new Grid(array, new Order(0,0,0,1 + stackNum), new Order(0,0,0,stackNum), 
+                    new Diner(new Soul (0,0), new ArrayList<Soul>()), new Soul(0,0));
+            if (colorGrid.countStacked() != stackNum) {
+                System.out.println("Grid: countStacked not working");
             }
         }
     }

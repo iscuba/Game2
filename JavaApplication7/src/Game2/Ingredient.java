@@ -28,11 +28,7 @@ public class Ingredient {
         this.color = color;
         this.stacked = s;
     }
-
-    public Ingredient stackIt() {
-        return new Ingredient(this.x, this.y, this.color, true);
-    }
-
+    
     public WorldImage drawIngredient() {
         switch (this.color) {
             case "green":
@@ -47,6 +43,10 @@ public class Ingredient {
                 return new RectangleImage(new Posn(this.x * 20, this.y * 20), 60, 20, new White());
         }
 
+    }
+
+    public Ingredient stackIt() {
+        return new Ingredient(this.x, this.y, this.color, true);
     }
 
     public static String randColor() {
@@ -75,10 +75,6 @@ public class Ingredient {
         int ex = randNum(1, 18);
         int wy = randNum(1, 18);
         return new Ingredient(ex, wy, randColor(), false);
-    }
-
-    public static Ingredient makeStackIngredient(int x, int y) {
-        return new Ingredient(x, y, randColor(), true);
     }
 
     public static void testIngredient() {

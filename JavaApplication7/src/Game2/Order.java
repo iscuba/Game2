@@ -43,6 +43,8 @@ public class Order {
     }
     
     public static void testOrder(){
+        
+        //Filled
         for (int i = 0; i<100; i++){
             Order testOrder = makeRandOrder();
             if (!testOrder.filled(testOrder)){
